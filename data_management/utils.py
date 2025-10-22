@@ -189,6 +189,9 @@ class Config(pydantic.BaseModel):
     is_opto_perturbation: Optional[bool] = pydantic.Field(
         default=False, description="Optogenetic perturbation or control session"
     )
+    is_context_naive: Optional[bool] = pydantic.Field(
+        default=False, description="Subject was not trained on stage 3"
+    )
     session_type: Literal["ephys", "behavior_with_sync"] = pydantic.Field(
         default="ephys", description="Type of session: ephys or behavior_with_sync"
     )
@@ -667,7 +670,7 @@ def get_folder_table(
         hidden_columns=["date"] + (["ephys"] if ephys_only else []),
         # groupby=["subject"],
         page_size=15,
-        value=df,
+        value=df.sort_values(by='subject'),
         selectable="checkbox-single",
         # disabled=True,
         show_index=False,
