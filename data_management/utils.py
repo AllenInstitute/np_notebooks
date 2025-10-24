@@ -215,9 +215,12 @@ class Config(pydantic.BaseModel):
                 data.pop("project"): [
                     {
                         f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder')}": {
-                            k: v
-                            for k, v in data.items()
-                            if v is not None and v != self.model_fields[k].default
+                            'ephys_day': self.ephys_day,
+                            'session_kwargs': {
+                                k: v
+                                for k, v in data.items()
+                                if v is not None and v != self.model_fields[k].default
+                            }
                         }
                     }
                 ]
