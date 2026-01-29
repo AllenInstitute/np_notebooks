@@ -19,28 +19,36 @@ git status --short
 echo.
 
 :: Check if there are any changes
+set has_changes=0
 git diff-index --quiet HEAD
 if %errorlevel% neq 0 (
     echo WARNING: You have uncommitted changes!
+    set has_changes=1
 ) else (
     git ls-files --others --exclude-standard | findstr . >nul
     if !errorlevel! equ 0 (
         echo WARNING: You have untracked files!
+        set has_changes=1
     )
 )
 
-:: Confirm reset action
-echo.
-echo ========================================
-echo This will RESET the repository to origin/main
-echo ALL local changes will be LOST!
-echo ========================================
-set confirm=y
-set /p confirm="Continue with reset? (y/n) [%confirm%]: "
-if /i "%confirm%"=="n" (
-    echo Operation cancelled.
-    pause
-    exit /b 1
+:: Only confirm if there are changes
+if !has_changes! equ 1 (
+    echo.
+    echo ========================================
+    echo This will RESET the repository to origin/main
+    echo ALL local changes will be LOST!
+    echo ========================================
+    set confirm=y
+    set /p confirm="Continue with reset? (y/n) [%confirm%]: "
+    if /i "!confirm!"=="n" (
+        echo Operation cancelled.
+        pause
+        exit /b 1
+    )
+) else (
+    echo No local changes detected. Proceeding with update...
+    echo.
 )
 
 :: Fetch latest from remote
