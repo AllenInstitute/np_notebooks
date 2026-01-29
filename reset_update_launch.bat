@@ -6,7 +6,6 @@ taskkill /f /im python.exe
 
 cd c:\users\svc_neuropix\documents\github\np_notebooks
 
-
 echo git reset
 git reset --hard -q
 
@@ -21,6 +20,8 @@ IF not %clean%==n (
 git clean -f -d
 )
 
+echo switch to main
+git checkout origin/main
 git pull origin main
 
 uv sync -p 3.11
