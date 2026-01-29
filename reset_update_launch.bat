@@ -6,8 +6,6 @@ taskkill /f /im python.exe
 
 cd c:\users\svc_neuropix\documents\github\np_notebooks
 
-@REM call \\allen\programs\mindscope\workgroups\np-exp\envs\win\np_notebooks\3.11\.venv\Scripts\activate
-call .venv\scripts\activate.bat
 
 echo git reset
 git reset --hard -q
@@ -25,8 +23,8 @@ git clean -f -d
 
 git pull origin main
 
-@REM python -m pip install -r requirements.txt
-python -m pdm sync
+uv sync
+call .venv\scripts\activate.bat
 
 start C:\JupyterLab\JupyterLab.exe
 

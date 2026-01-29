@@ -29,24 +29,23 @@ jobs:
     permissions: write-all
 
     steps:
-    - uses: actions/checkout@v3
-        
-    - uses: pdm-project/setup-pdm@v3
+    - uses: actions/checkout@v4
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+        # use PAT, or push comes from `github-actions` bot, which can't trigger
+        # other workflows   
+    
+    - uses: astral-sh/setup-uv@v5.4.1
       with:
-        version: 'head'     
         python-version: ${{ matrix.python-version }}
-        update-python: true
-        cache: true
-
-    - name: Install package
-      run: |
-        pdm lock --strategy inherit_metadata --update-reuse
-        pdm update np_workflows
         
+    - name: Install dependencies
+      run: |
+        uv lock --upgrade        
         
     - name: Add requirements.txt
       run: |
-        pdm export --without-hashes -o requirements.txt
+        uv export --format requirements.txt
         
     - name: Commit changes
       uses: EndBug/add-and-commit@v9

@@ -1,15 +1,16 @@
 [project]
+name = "np-notebooks"
 description = "IPython notebooks for Mindscope Neuropixels workflows"
 authors = [
     { name = "bjhardcastle", email = "ben.hardcastle@alleninstitute.org" },
 ]
+version = "0.1.0"
 requires-python = ">=3.11, <3.12"
 dependencies = [
     "ipykernel",
     "np-workflows>=1.6.87",
-    "npc-sessions>=0.0.222",
+    "npc-sessions>=0.0.274",
     "npc-shields>=0.1.14",
     "np-session>=0.6.47",
     "np-config>=0.4.34",
-    "np-codeocean[dynamic-routing-metadata]>=0.3.1",
 ]

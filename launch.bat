@@ -6,8 +6,6 @@ taskkill /f /im JupyterLab.exe
 
 cd c:\users\svc_neuropix\documents\github\np_notebooks
 
-call .venv\scripts\activate.bat
-
 echo git reset
 git reset --hard -q
 
@@ -24,7 +22,8 @@ git clean -f -d
 
 git pull origin main
 
-python -m pdm update np_workflows --no-self
+uv sync
+call .venv\scripts\activate.bat
 
 start C:\JupyterLab\JupyterLab.exe
 
