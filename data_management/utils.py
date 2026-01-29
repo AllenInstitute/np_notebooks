@@ -161,17 +161,9 @@ def get_codeocean_config() -> dict[Literal["region"], str]:
     """Config for connecting to CodeOcean via http API"""
     return np_config.fetch("/projects/np_codeocean/codeocean")["credentials"]
 
-
-class Config(pydantic.BaseModel):
-    folder: str
-    ephys_day: Optional[int] = pydantic.Field(
-        default=None, description="Day of ephys recording (starting at 1)", gt=0
-    )
-    perturbation_day: Optional[int] = pydantic.Field(
-        default=None,
-        description="Day of opto or injection perturbation (starting at 1)",
-        gt=0,
-    )
+class SessionKwargs(pydantic.BaseModel):
+    #! all fields must have a null default so we can instantiate a default object
+    
     probe_letters_to_skip: Optional[str] = pydantic.Field(
         default="",
         description="Probe letters that weren't inserted or had issues; will be skipped from all further processing (e.g. 'ABC')",
@@ -184,20 +176,19 @@ class Config(pydantic.BaseModel):
         default=True, description="Set to false if this is a test/dev session"
     )
     is_injection_perturbation: Optional[bool] = pydantic.Field(
-        default=False, description="Injection perturbation or control session"
+        default=False, description="Injection perturbation"
+    )
+    is_injection_perturbation_control: Optional[bool] = pydantic.Field(
+        default=False, description="Control session for injection perturbations"
     )
     is_opto_perturbation: Optional[bool] = pydantic.Field(
-        default=False, description="Optogenetic perturbation or control session"
+        default=False, description="Optogenetic perturbation"
+    )
+    is_opto_perturbation_control: Optional[bool] = pydantic.Field(
+        default=False, description="Control session for optogenetic perturbations"
     )
     is_context_naive: Optional[bool] = pydantic.Field(
         default=False, description="Subject was not trained on stage 3"
-    )
-    session_type: Literal["ephys", "behavior_with_sync"] = pydantic.Field(
-        default="ephys", description="Type of session: ephys or behavior_with_sync"
-    )
-    project: Literal["DynamicRouting", "TempletonPilotSession"] = pydantic.Field(
-        default="DynamicRouting",
-        description="Project name: DynamicRouting or TempletonPilotSession",
     )
 
     @pydantic.field_validator(
@@ -207,6 +198,38 @@ class Config(pydantic.BaseModel):
     )
     def cast_to_upper_case(cls, v):
         return v.upper() if isinstance(v, str) else v
+    
+    def to_dict(self) -> dict[str, Any]:
+        data = self.model_dump()
+        return {
+            k: v
+            for k, v in data.items()
+            if v is not None and v != self.__class__.model_fields[k].default
+        }
+
+
+class Config(pydantic.BaseModel):
+    
+    folder_name: str
+    project: Literal["DynamicRouting", "TempletonPilotSession"] = pydantic.Field(
+        default="DynamicRouting",
+        description="Project name: DynamicRouting or TempletonPilotSession",
+    )
+    session_type: Literal["ephys", "behavior_with_sync"] = pydantic.Field(
+        default="ephys", description="Type of session: ephys or behavior_with_sync"
+    )
+    ephys_day: Optional[int] = pydantic.Field(
+        default=None, description="Day of ephys recording (starting at 1)", gt=0
+    )
+    perturbation_day: Optional[int] = pydantic.Field(
+        default=None,
+        description="Day of opto or injection perturbation (starting at 1)",
+        gt=0,
+    )
+    notes: str = pydantic.Field(default="", description="Any additional notes about the session that could affect processing, not captured by other metadata")
+    session_kwargs: SessionKwargs = pydantic.Field(
+        default_factory=SessionKwargs,
+    )
 
     def to_dict(self) -> dict[str, Any]:
         data = self.model_dump()
@@ -214,10 +237,10 @@ class Config(pydantic.BaseModel):
             data.pop("session_type"): {
                 data.pop("project"): [
                     {
-                        f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder')}": {
+                        f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder_name')}": {
                             k: v
                             for k, v in data.items()
-                            if v is not None and v != self.model_fields[k].default
+                            if v is not None and v != self.__class__.model_fields[k].default
                         }
                     }
                 ]
