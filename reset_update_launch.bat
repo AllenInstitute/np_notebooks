@@ -23,8 +23,7 @@ git clean -f -d
 
 git pull origin main
 
-uv sync
-call .venv\scripts\activate.bat
+uv sync -p 3.11
 
 start C:\JupyterLab\JupyterLab.exe
 
