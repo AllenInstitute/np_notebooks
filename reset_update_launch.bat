@@ -40,7 +40,7 @@ if !has_changes! equ 1 (
     echo ALL local changes will be LOST!
     echo ========================================
     set confirm=y
-    set /p confirm="Continue with reset? (y/n) [%confirm%]: "
+    set /p confirm="Continue with reset? (y/n) [!confirm!]: "
     if /i "!confirm!"=="n" (
         echo Operation cancelled.
         pause
