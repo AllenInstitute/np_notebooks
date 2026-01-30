@@ -255,9 +255,9 @@ charset-normalizer==3.4.4 \
     --hash=sha256:ebf3e58c7ec8a8bed6d66a75d7fb37b55e5015b03ceae72a8e7c74495551e224 \
     --hash=sha256:eecbc200c7fd5ddb9a7f16c7decb07b566c29fa2161a16cf67b8d068bd21690a
     # via requests
-codeocean==0.13.0 \
-    --hash=sha256:35931d17df127ffa5132b7282e99447523650018bc22bbea9657f90b93414ad4 \
-    --hash=sha256:7ff91c01f5cc43b614f2c4db2d47a2def124e8cf54b4c38cd1458e0411f7e134
+codeocean==0.14.0 \
+    --hash=sha256:33ea9cde80df0c7d986e493a88edbe00f13b5d0cf92cfaed8a518f7314dbf4e1 \
+    --hash=sha256:90d2a58a9c8d05edc53becc0b63773c5b8cd44423de19afa3b0ce1d82ebfadc6
     # via
     #   aind-codeocean-pipeline-monitor
     #   aind-session
@@ -353,13 +353,13 @@ dataclasses-json==0.6.7 \
     --hash=sha256:0dbf33f26c8d5305befd61b39d2b3414e8a407bedc2834dea9b8d642666fb40a \
     --hash=sha256:b6b3e528266ea45b9535223bc53ca645f5208833c29229e847b3f26a1cc55fc0
     # via codeocean
-debugpy==1.8.19 \
-    --hash=sha256:14035cbdbb1fe4b642babcdcb5935c2da3b1067ac211c5c5a8fdc0bb31adbcaa \
-    --hash=sha256:360ffd231a780abbc414ba0f005dad409e71c78637efe8f2bd75837132a41d38 \
-    --hash=sha256:783a519e6dfb1f3cd773a9bda592f4887a65040cb0c7bd38dde410f4e53c40d4 \
-    --hash=sha256:806d6800246244004625d5222d7765874ab2d22f3ba5f615416cf1342d61c488 \
-    --hash=sha256:c5dcfa21de1f735a4f7ced4556339a109aa0f618d366ede9da0a3600f2516d8b \
-    --hash=sha256:eea7e5987445ab0b5ed258093722d5ecb8bb72217c5c9b1e21f64efe23ddebdb
+debugpy==1.8.20 \
+    --hash=sha256:1f7650546e0eded1902d0f6af28f787fa1f1dbdbc97ddabaf1cd963a405930cb \
+    --hash=sha256:55bc8701714969f1ab89a6d5f2f3d40c36f91b2cbe2f65d98bf8196f6a6a2c33 \
+    --hash=sha256:5be9bed9ae3be00665a06acaa48f8329d2b9632f15fd09f6a9a8c8d9907e54d7 \
+    --hash=sha256:773e839380cf459caf73cc533ea45ec2737a5cc184cf1b3b796cd4fd98504fec \
+    --hash=sha256:7de0b7dfeedc504421032afba845ae2a7bcc32ddfb07dae2c3ca5442f821c344 \
+    --hash=sha256:eada6042ad88fa1571b74bd5402ee8b86eded7a8f7b827849761700aff171f1b
     # via ipykernel
 decorator==5.2.1 \
     --hash=sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360 \
@@ -985,9 +985,9 @@ np-tools==0.1.24 \
     #   np-jobs
     #   np-session
     #   np-workflows
-np-workflows==1.6.89 \
-    --hash=sha256:984d7ffd6dad827cd06937d0eda783d2c16de3d51f118934af1ae5d936782923 \
-    --hash=sha256:c4a30313bfbf9335f25036158053a4bb3349deb0e190abb5ecd002899fa73c86
+np-workflows==1.6.90 \
+    --hash=sha256:ab58881c57a6333951fe64434d901074522e4037b0dc33b47736f48dbcf6ae6b \
+    --hash=sha256:eeabff51f4c98cb6d0508a349e612e0ccdd012598e459d1532db20b11a6f0e30
     # via np-notebooks
 npc-ephys==0.1.37 \
     --hash=sha256:ccef4f1bd21be6bbfa13ba8ea4b706e0ce877383ed4b0c072dcc974f35687ba3 \
@@ -1297,15 +1297,15 @@ proto-plus==1.27.0 \
     # via
     #   google-api-core
     #   google-cloud-firestore
-protobuf==6.33.4 \
-    --hash=sha256:1fe3730068fcf2e595816a6c34fe66eeedd37d51d0400b72fabc848811fdc1bc \
-    --hash=sha256:2fe67f6c014c84f655ee06f6f66213f9254b3a8b6bda6cda0ccd4232c73c06f0 \
-    --hash=sha256:3df850c2f8db9934de4cf8f9152f8dc2558f49f298f37f90c517e8e5c84c30e9 \
-    --hash=sha256:757c978f82e74d75cba88eddec479df9b99a42b31193313b75e492c06a51764e \
-    --hash=sha256:8f11ffae31ec67fc2554c2ef891dcb561dae9a2a3ed941f9e134c2db06657dbc \
-    --hash=sha256:918966612c8232fc6c24c78e1cd89784307f5814ad7506c308ee3cf86662850d \
-    --hash=sha256:c7c64f259c618f0bef7bee042075e390debbf9682334be2b67408ec7c1c09ee6 \
-    --hash=sha256:dc2e61bca3b10470c1912d166fe0af67bfc20eb55971dcef8dfa48ce14f0ed91
+protobuf==6.33.5 \
+    --hash=sha256:3093804752167bcab3998bec9f1048baae6e29505adaf1afd14a37bddede533c \
+    --hash=sha256:69915a973dd0f60f31a08b8318b73eab2bd6a392c79184b3612226b0a3f8ec02 \
+    --hash=sha256:6ddcac2a081f8b7b9642c09406bc6a4290128fce5f471cddd165960bb9119e5c \
+    --hash=sha256:8afa18e1d6d20af15b417e728e9f60f3aa108ee76f23c3b2c07a2c3b546d3afd \
+    --hash=sha256:9b71e0281f36f179d00cbcb119cb19dec4d14a81393e5ea220f64b286173e190 \
+    --hash=sha256:a5cb85982d95d906df1e2210e58f8e4f1e3cdc088e52c921a041f9c9a0386de5 \
+    --hash=sha256:cbf16ba3350fb7b889fca858fb215967792dc125b35c7976ca4818bee3521cf0 \
+    --hash=sha256:d71b040839446bac0f4d162e758bea99c8251161dae9d0983a3b88dee345153b
     # via
     #   google-api-core
     #   google-cloud-firestore
