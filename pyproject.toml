@@ -9,6 +9,7 @@ requires-python = ">=3.11, <3.12"
 dependencies = [
     "ipykernel",
     "np-workflows>=1.6.91",
+    "np-services[pretest]>=0.1.73",
     "npc-sessions>=0.0.274",
     "npc-shields>=0.1.14",
     "np-session>=0.6.47",
