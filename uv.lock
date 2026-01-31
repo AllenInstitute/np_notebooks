@@ -1888,6 +1888,7 @@ dependencies = [
     { name = "ipykernel" },
     { name = "jupyterlab" },
     { name = "np-config" },
+    { name = "np-services" },
     { name = "np-session" },
     { name = "np-workflows" },
     { name = "npc-sessions" },
@@ -1899,6 +1900,7 @@ requires-dist = [
     { name = "ipykernel" },
     { name = "jupyterlab", specifier = ">=4.5.3" },
     { name = "np-config", specifier = ">=0.4.34" },
+    { name = "np-services", extras = ["pretest"], specifier = ">=0.1.73" },
     { name = "np-session", specifier = ">=0.6.47" },
     { name = "np-workflows", specifier = ">=1.6.91" },
     { name = "npc-sessions", specifier = ">=0.0.274" },
@@ -1907,14 +1909,13 @@ requires-dist = [
 
 [[package]]
 name = "np-services"
-version = "0.1.71"
+version = "0.1.73"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fabric" },
     { name = "h5py" },
     { name = "np-config" },
     { name = "np-session" },
-    { name = "npc-ephys" },
     { name = "npc-mvr" },
     { name = "npc-stim" },
     { name = "npc-sync" },
@@ -1923,9 +1924,9 @@ dependencies = [
     { name = "requests" },
     { name = "tables" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a8/66/f1f9ff526e181f8fc612f5114e085a8541383f9650c7176e63a02bb2611c/np_services-0.1.71.tar.gz", hash = "sha256:98da42a2710697bb343ac4281d178596a3df79a4e38a944456d120c3f9f06f27", size = 28427, upload-time = "2026-01-30T22:59:38.485Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e1/af/3da098e56669d0c48ba902a110f172c2bcceaf32f7298e3b343b4975f433/np_services-0.1.73.tar.gz", hash = "sha256:a0caf2fd16a554633b19a72753d7cdc2765a6d881aaa94a53ed671f6cec8e816", size = 28434, upload-time = "2026-01-31T03:00:58.035Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b6/2b/0b6a019a378e8eba12a29f39076707d971409be93ff78783480e5ab8a17d/np_services-0.1.71-py3-none-any.whl", hash = "sha256:d4565073de8f9f187d9768d18a0aea188b3b2d7b3fd5321514304b6e5de833cf", size = 31131, upload-time = "2026-01-30T22:59:39.602Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/0c/7f6e1dcd88beff56054f3ee37586c134b5b48ebdc0296b612f1f82f73825/np_services-0.1.73-py3-none-any.whl", hash = "sha256:1aacc5255c3733b4ddcc232fc5f2f1131db7ff3806a98656e5062e41ef30acca", size = 31126, upload-time = "2026-01-31T03:00:59.235Z" },
 ]
 
 [[package]]

@@ -920,10 +920,12 @@ np-logging==0.5.1 \
     #   np-jobs
     #   np-session
     #   np-tools
-np-services==0.1.71 \
-    --hash=sha256:98da42a2710697bb343ac4281d178596a3df79a4e38a944456d120c3f9f06f27 \
-    --hash=sha256:d4565073de8f9f187d9768d18a0aea188b3b2d7b3fd5321514304b6e5de833cf
-    # via np-workflows
+np-services==0.1.73 \
+    --hash=sha256:1aacc5255c3733b4ddcc232fc5f2f1131db7ff3806a98656e5062e41ef30acca \
+    --hash=sha256:a0caf2fd16a554633b19a72753d7cdc2765a6d881aaa94a53ed671f6cec8e816
+    # via
+    #   np-notebooks
+    #   np-workflows
 np-session==0.6.48 \
     --hash=sha256:631aebf71aad0da680d1bc6b7f4c2d411dc6f83be4dfc86f3e117eed7f3804f5 \
     --hash=sha256:aa7169aaa6a8c8a8dbfae7ed9f3d77888e438330068e595e5a7d0d62f3c5924f
@@ -947,7 +949,6 @@ npc-ephys==0.1.37 \
     --hash=sha256:ccef4f1bd21be6bbfa13ba8ea4b706e0ce877383ed4b0c072dcc974f35687ba3 \
     --hash=sha256:d4c68c270fbbfd7a61de2531e441cfe7a7fd165ec3affa79e7dd410c407d470a
     # via
-    #   np-services
     #   npc-samstim
     #   npc-sessions
 npc-io==0.1.32 \
