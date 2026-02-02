@@ -1888,7 +1888,7 @@ dependencies = [
     { name = "ipykernel" },
     { name = "jupyterlab" },
     { name = "np-config" },
-    { name = "np-services" },
+    { name = "np-services", extra = ["pretest"] },
     { name = "np-session" },
     { name = "np-workflows" },
     { name = "npc-sessions" },
@@ -1900,16 +1900,16 @@ requires-dist = [
     { name = "ipykernel" },
     { name = "jupyterlab", specifier = ">=4.5.3" },
     { name = "np-config", specifier = ">=0.4.34" },
-    { name = "np-services", extras = ["pretest"], specifier = ">=0.1.73" },
+    { name = "np-services", extras = ["pretest"], specifier = ">=0.1.74" },
     { name = "np-session", specifier = ">=0.6.47" },
-    { name = "np-workflows", specifier = ">=1.6.91" },
+    { name = "np-workflows", specifier = ">=1.6.96" },
     { name = "npc-sessions", specifier = ">=0.0.274" },
     { name = "npc-shields", specifier = ">=0.1.14" },
 ]
 
 [[package]]
 name = "np-services"
-version = "0.1.73"
+version = "0.1.74"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fabric" },
@@ -1924,9 +1924,14 @@ dependencies = [
     { name = "requests" },
     { name = "tables" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e1/af/3da098e56669d0c48ba902a110f172c2bcceaf32f7298e3b343b4975f433/np_services-0.1.73.tar.gz", hash = "sha256:a0caf2fd16a554633b19a72753d7cdc2765a6d881aaa94a53ed671f6cec8e816", size = 28434, upload-time = "2026-01-31T03:00:58.035Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/23/af/c6030c9fb21d60ac4255eb08b45ecf35930667e7f1b3e444d61f5f48e3ff/np_services-0.1.74.tar.gz", hash = "sha256:7e29b7057c00158da80aeb515e85c1aad9a1e5527f58ea9e6beb78a8bc7aafc8", size = 28493, upload-time = "2026-02-02T19:16:34.763Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7b/0c/7f6e1dcd88beff56054f3ee37586c134b5b48ebdc0296b612f1f82f73825/np_services-0.1.73-py3-none-any.whl", hash = "sha256:1aacc5255c3733b4ddcc232fc5f2f1131db7ff3806a98656e5062e41ef30acca", size = 31126, upload-time = "2026-01-31T03:00:59.235Z" },
+    { url = "https://files.pythonhosted.org/packages/15/50/3bc1fef40ceac7e9a88b702dcbf853a9d4d5020364167facbb8e0cd2ec3b/np_services-0.1.74-py3-none-any.whl", hash = "sha256:cfc65d61efb82aff09086408a34dbf489620c289ab2e5e258eecb059e520b02a", size = 31165, upload-time = "2026-02-02T19:16:33.766Z" },
+]
+
+[package.optional-dependencies]
+pretest = [
+    { name = "npc-ephys" },
 ]
 
 [[package]]
@@ -1970,7 +1975,7 @@ wheels = [
 
 [[package]]
 name = "np-workflows"
-version = "1.6.92"
+version = "1.6.96"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ipykernel" },
@@ -1986,9 +1991,9 @@ dependencies = [
     { name = "s3fs" },
     { name = "universal-pathlib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5a/4d/fb25b3c3462ac0e7e65ebf8baee458979a4202d9fd3a2bd255ff996cd267/np_workflows-1.6.92.tar.gz", hash = "sha256:2a9c1a0644f2feb61fc9ebb1e45e2b65f711df2c366795abfcfa6bb02d526d3b", size = 45214, upload-time = "2026-02-02T17:09:35.5Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/63/d1/0c85e67a9e0ba19e47c2ce72accb5508f8ea8ff093b78523a1067e84d260/np_workflows-1.6.96.tar.gz", hash = "sha256:a791324b9aaef1fb0bf2a5b4f655f5e8271335738d68097afe527d9f53a29abb", size = 45825, upload-time = "2026-02-02T19:26:52.733Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a9/a0/72a7f660d94bc31a2216ea2f555bd8014d76e74625237edeb5789760084b/np_workflows-1.6.92-py3-none-any.whl", hash = "sha256:a413ef2c90bfcdbfb414de154fd10d099a84a054c21f6ffa5bf65a4d0e38a893", size = 71134, upload-time = "2026-02-02T17:09:36.318Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/f8/1a78ce6d27af451959f8e707728de1e297c2269a96c5359c5f619cfc1fd8/np_workflows-1.6.96-py3-none-any.whl", hash = "sha256:bdab85700b70261dfdff7f2b54605cbdd639b16d4fbbffbc7d48dcc6abe1ab0f", size = 71722, upload-time = "2026-02-02T19:26:54.044Z" },
 ]
 
 [[package]]
@@ -2364,7 +2369,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess" },
+    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
