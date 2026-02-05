@@ -215,13 +215,14 @@ class Config(pydantic.BaseModel):
                 data.pop("project"): [
                     {
                         f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder')}": {
-                            'ephys_day': self.ephys_day,
-                            'session_kwargs': {
+                            "ephys_day": self.ephys_day,
+                            "session_kwargs": {
                                 k: v
                                 for k, v in data.items()
-                                if v is not None and v != self.model_fields[k].default
-                                and k not in ('ephys_day', 'perturbation_day')
-                            }
+                                if v is not None
+                                and v != self.model_fields[k].default
+                                and k not in ("ephys_day", "perturbation_day")
+                            },
                         }
                     }
                 ]
@@ -231,21 +232,24 @@ class Config(pydantic.BaseModel):
     def to_yaml_text_snippet(self) -> str:
         d = self.to_dict()
         indent = " " * 4
-        s = f"{indent}- {self.folder}:"
+        s = f"\n{indent}- {self.folder}:"
         for attr in (
-            'ephys_day', 'perturbation_day', 
+            "ephys_day",
+            "perturbation_day",
         ):
-            if (value := getattr(self, attr, None)): 
-                s = s + '\n' + indent * 2 + f"ephys_day: {value}"
-        session_kwargs = next(iter(next(iter(d[self.session_type][self.project])).values()))['session_kwargs']
+            if value := getattr(self, attr, None):
+                s = s + "\n" + indent * 2 + f"ephys_day: {value}"
+        session_kwargs = next(
+            iter(next(iter(d[self.session_type][self.project])).values())
+        )["session_kwargs"]
         if session_kwargs:
-            s = s + '\n' + indent * 2 + "session_kwargs:"
+            s = s + "\n" + indent * 2 + "session_kwargs:"
             for k, v in session_kwargs.items():
-                s = s + '\n' + indent * 3 + f"{k}: {v}"
-        
+                s = s + "\n" + indent * 3 + f"{k}: {v}"
+
         if s.endswith(":"):
             s = s[:-1]
-        return s
+        return s + "\n"
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], session_id: str) -> Self:
@@ -570,7 +574,7 @@ def get_folder_df(ttl_hash: int | None = None):
         logger.info(f"Fetching info for {s}")
         row = dict.fromkeys(columns, None)
         row["folder"] = s
-        row["ephys"] = bool(next((EPHYS / s).rglob('settings*.xml'), None))
+        row["ephys"] = bool(next((EPHYS / s).rglob("settings*.xml"), None))
         row["date"] = npc_session.extract_isoformat_date(s)
         row["subject"] = str(npc_session.extract_subject(s))
         upload = UPLOAD / s / "upload.csv"
@@ -632,17 +636,19 @@ def get_folders_with_no_metadata() -> tuple[str, ...]:
         )
         if c.exists()
     ]
-    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(named=True):
-        if not row['ephys']:
+    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(
+        named=True
+    ):
+        if not row["ephys"]:
             continue
         for config_yaml in config_yamls:
             config = Config.from_dict(
-                yaml.safe_load(config_yaml.read_text()) or {}, row['folder']
+                yaml.safe_load(config_yaml.read_text()) or {}, row["folder"]
             )
             if config is not None:
                 break
         else:
-            sessions.append(row['folder'])
+            sessions.append(row["folder"])
     return tuple(sorted(sessions, reverse=True))
 
 
@@ -693,7 +699,7 @@ def get_folder_table(
         hidden_columns=["date"] + (["ephys"] if ephys_only else []),
         # groupby=["subject"],
         page_size=15,
-        value=df.sort_values(by='subject'),
+        value=df.sort_values(by="subject"),
         selectable="checkbox-single",
         # disabled=True,
         show_index=False,
