@@ -236,7 +236,6 @@ class Config(pydantic.BaseModel):
         else:
             assert self.project == 'TempletonPilotSession', 'only dr and templeton projects implemnted'
             session_dir_parent = '//allen/programs/mindscope/workgroups/templeton/TTOC/pilot recordings/'
-        session_dir_parent = 
         s = f"\n{indent}- {session_dir_parent}{self.folder}:"
         for attr in (
             "ephys_day",
