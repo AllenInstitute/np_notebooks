@@ -215,14 +215,13 @@ class Config(pydantic.BaseModel):
                 data.pop("project"): [
                     {
                         f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder')}": {
-                            "ephys_day": self.ephys_day,
-                            "session_kwargs": {
+                            'ephys_day': self.ephys_day,
+                            'session_kwargs': {
                                 k: v
                                 for k, v in data.items()
-                                if v is not None
-                                and v != self.model_fields[k].default
-                                and k not in ("ephys_day", "perturbation_day")
-                            },
+                                if v is not None and v != self.model_fields[k].default
+                                and k not in ('ephys_day', 'perturbation_day')
+                            }
                         }
                     }
                 ]
@@ -232,7 +231,13 @@ class Config(pydantic.BaseModel):
     def to_yaml_text_snippet(self) -> str:
         d = self.to_dict()
         indent = " " * 4
-        s = f"\n{indent}- {self.folder}:"
+        if self.project == 'DynamicRouting':
+            session_dir_parent = '//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/'
+        else:
+            assert self.project == 'TempletonPilotSession', 'only dr and templeton projects implemnted'
+            session_dir_parent = '//allen/programs/mindscope/workgroups/templeton/TTOC/pilot recordings/'
+        session_dir_parent = 
+        s = f"\n{indent}- {session_dir_parent}{self.folder}:"
         for attr in (
             "ephys_day",
             "perturbation_day",
@@ -246,11 +251,11 @@ class Config(pydantic.BaseModel):
             s = s + "\n" + indent * 2 + "session_kwargs:"
             for k, v in session_kwargs.items():
                 s = s + "\n" + indent * 3 + f"{k}: {v}"
-
         if s.endswith(":"):
             s = s[:-1]
-        return s + "\n"
-
+        s = s.replace("\n\n", "\n")
+        return s + "\n" + (indent if (self.project == "DynamicRouting" and self.session_type == "ephys") else "")
+        
     @classmethod
     def from_dict(cls, data: dict[str, Any], session_id: str) -> Self:
         """Assumes each session is only in one project/session type"""
@@ -415,16 +420,24 @@ class ConfigWidget(ipw.VBox):
     def save(self) -> None:
         with self.console:
             self.update_from_text_boxes()
-            if self.yaml_path.exists():
-                print(f"Updating {self.yaml_path}")
-                existing = yaml.safe_load(self.yaml_path.read_text()) or {}
+            root = pathlib.Path().resolve().parent.parent 
+            yml =  (root / 'npc_lims' / 'tracked_sessions.yaml')
+            if not yml.exists():
+                raise FileNotFoundError(f"git clone npc_lims into {root} before trying to update tracked_sessions.yaml")
+            txt = yml.read_text()
+            if self.config.session_type == 'ephys':
+                ephys_stop = txt.find('behavior_with_sync:')
+                if self.config.project == 'TempletonPilotSession':
+                    stop = ephys_stop
+                else:
+                    stop = txt[:ephys_stop].find('TempletonPilotSession:')
             else:
-                print(f"Creating {self.yaml_path}")
-                self.yaml_path.parent.mkdir(parents=True, exist_ok=True)
-                existing = {}
-            self.config.update_existing_dict(existing)
-            self.yaml_path.write_text(yaml.dump(existing))
-            print("Done")
+                assert self.config.session_type == 'behavior_with_sync'
+                stop = len(txt)
+            new = txt[:stop] + '\n' + self.config.to_yaml_text_snippet() + '\n' + (txt[stop:] if stop else '\n')
+            print("Updating tracked_sessions.yaml")
+            pathlib.Path(yml).write_text(new)
+            print("Done. If you need to update the info, run the cell above to git reset tracked_sessions.yaml, then re-save output from all widgets")
 
 
 # def toggle_tracebacks() -> Generator[None, None, None]:
@@ -518,7 +531,7 @@ def validate_folder_contents(folder_names: Iterable[str]) -> None:
 
 
 def display_config_widgets(session_folders: Iterable[str]) -> None:
-    for folder in session_folders:
+    for folder in sorted(session_folders):
         if "surface_channel" in folder:
             print(
                 "Skipping surface channel folder: metadata is same as main session folder"
@@ -574,7 +587,7 @@ def get_folder_df(ttl_hash: int | None = None):
         logger.info(f"Fetching info for {s}")
         row = dict.fromkeys(columns, None)
         row["folder"] = s
-        row["ephys"] = bool(next((EPHYS / s).rglob("settings*.xml"), None))
+        row["ephys"] = bool(next((EPHYS / s).rglob('settings*.xml'), None))
         row["date"] = npc_session.extract_isoformat_date(s)
         row["subject"] = str(npc_session.extract_subject(s))
         upload = UPLOAD / s / "upload.csv"
@@ -636,19 +649,17 @@ def get_folders_with_no_metadata() -> tuple[str, ...]:
         )
         if c.exists()
     ]
-    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(
-        named=True
-    ):
-        if not row["ephys"]:
+    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(named=True):
+        if not row['ephys']:
             continue
         for config_yaml in config_yamls:
             config = Config.from_dict(
-                yaml.safe_load(config_yaml.read_text()) or {}, row["folder"]
+                yaml.safe_load(config_yaml.read_text()) or {}, row['folder']
             )
             if config is not None:
                 break
         else:
-            sessions.append(row["folder"])
+            sessions.append(row['folder'])
     return tuple(sorted(sessions, reverse=True))
 
 
@@ -699,7 +710,7 @@ def get_folder_table(
         hidden_columns=["date"] + (["ephys"] if ephys_only else []),
         # groupby=["subject"],
         page_size=15,
-        value=df.sort_values(by="subject"),
+        value=df.sort_values(by='subject'),
         selectable="checkbox-single",
         # disabled=True,
         show_index=False,
