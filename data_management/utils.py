@@ -220,12 +220,32 @@ class Config(pydantic.BaseModel):
                                 k: v
                                 for k, v in data.items()
                                 if v is not None and v != self.model_fields[k].default
+                                and k not in ('ephys_day', 'perturbation_day')
                             }
                         }
                     }
                 ]
             }
         }
+
+    def to_yaml_text_snippet(self) -> str:
+        d = self.to_dict()
+        indent = " " * 4
+        s = f"{indent}- {self.folder}:"
+        for attr in (
+            'ephys_day', 'perturbation_day', 
+        ):
+            if (value := getattr(self, attr, None)): 
+                s = s + '\n' + indent * 2 + f"ephys_day: {value}"
+        session_kwargs = next(iter(next(iter(d[self.session_type][self.project])).values()))['session_kwargs']
+        if session_kwargs:
+            s = s + '\n' + indent * 2 + "session_kwargs:"
+            for k, v in session_kwargs.items():
+                s = s + '\n' + indent * 3 + f"{k}: {v}"
+        
+        if s.endswith(":"):
+            s = s[:-1]
+        return s
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], session_id: str) -> Self:
