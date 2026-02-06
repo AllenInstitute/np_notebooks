@@ -234,7 +234,7 @@ class Config(pydantic.BaseModel):
         if self.project == 'DynamicRouting':
             session_dir_parent = '//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/'
         else:
-            assert self.project == 'TempletonPilotSession', 'only dr and templeton projects implemnted'
+            assert self.project == 'TempletonPilotSession', 'only dr and templeton projects implemented'
             session_dir_parent = '//allen/programs/mindscope/workgroups/templeton/TTOC/pilot recordings/'
         s = f"\n{indent}- {session_dir_parent}{self.folder}:"
         for attr in (
