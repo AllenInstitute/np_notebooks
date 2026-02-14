@@ -929,9 +929,9 @@ np-tools==0.1.24 \
     #   np-jobs
     #   np-session
     #   np-workflows
-np-workflows==1.6.97 \
-    --hash=sha256:6f423c769fcb0233ca34ce8ed1f5925332aa3c5c090df7df092dcb433598f7d1 \
-    --hash=sha256:f3f40c103dbcbd6185ab70e5f5730f0d33e4050cb895d57cb912507e6b524eb0
+np-workflows==1.6.98 \
+    --hash=sha256:1141d0e645ed7683a8ffe784a20bd6e53084a990f708e55e107b5d39a48006e9 \
+    --hash=sha256:ca144f234da0f0d595ac14ad876311b7347f603402d4e1724f63a15f7b8f5ed5
     # via np-notebooks
 npc-ephys==0.1.41 \
     --hash=sha256:5a72ea9a666a7886a62da629c24c9a1d3193553fb3a5659c5bb81e02d6e28932 \

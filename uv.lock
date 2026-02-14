@@ -1941,7 +1941,7 @@ wheels = [
 
 [[package]]
 name = "np-workflows"
-version = "1.6.97"
+version = "1.6.98"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ipykernel" },
@@ -1957,9 +1957,9 @@ dependencies = [
     { name = "s3fs" },
     { name = "universal-pathlib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c3/8c/908ae37d6b920b0178c0b9983a5c6816af7ad04ba721afb404072e3b200a/np_workflows-1.6.97.tar.gz", hash = "sha256:f3f40c103dbcbd6185ab70e5f5730f0d33e4050cb895d57cb912507e6b524eb0", size = 47008, upload-time = "2026-02-09T22:31:34.948Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/6d/f32b6452ead5ba8a93cdf604a358e927e413dee626b30676f83944146aae/np_workflows-1.6.98.tar.gz", hash = "sha256:1141d0e645ed7683a8ffe784a20bd6e53084a990f708e55e107b5d39a48006e9", size = 47133, upload-time = "2026-02-14T00:00:47.691Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/74/ee/bedc685996b628188e372d1fdbc83041ceb9b0624c0e0b72bddcb243dcd1/np_workflows-1.6.97-py3-none-any.whl", hash = "sha256:6f423c769fcb0233ca34ce8ed1f5925332aa3c5c090df7df092dcb433598f7d1", size = 72984, upload-time = "2026-02-09T22:31:33.57Z" },
+    { url = "https://files.pythonhosted.org/packages/7e/f6/83231c4d26a9cc26a1b26cab9728808afc83e160f89e652854bbbbbe1bda/np_workflows-1.6.98-py3-none-any.whl", hash = "sha256:ca144f234da0f0d595ac14ad876311b7347f603402d4e1724f63a15f7b8f5ed5", size = 72987, upload-time = "2026-02-14T00:00:45.994Z" },
 ]
 
 [[package]]
