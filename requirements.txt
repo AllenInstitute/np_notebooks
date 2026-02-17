@@ -929,9 +929,9 @@ np-tools==0.1.24 \
     #   np-jobs
     #   np-session
     #   np-workflows
-np-workflows==1.6.98 \
-    --hash=sha256:1141d0e645ed7683a8ffe784a20bd6e53084a990f708e55e107b5d39a48006e9 \
-    --hash=sha256:ca144f234da0f0d595ac14ad876311b7347f603402d4e1724f63a15f7b8f5ed5
+np-workflows==1.6.99 \
+    --hash=sha256:84c6282302c76b6a09807692b7c38d4466ddab955d4a7cf9c87428b05fee3809 \
+    --hash=sha256:8b239ec72b6f968843c2ac7b7c7a94d7b0de62dbb9d3dbee624dd8cefc249088
     # via np-notebooks
 npc-ephys==0.1.41 \
     --hash=sha256:5a72ea9a666a7886a62da629c24c9a1d3193553fb3a5659c5bb81e02d6e28932 \
@@ -995,9 +995,9 @@ npc-stim==0.1.15 \
     #   npc-samstim
     #   npc-sessions
     #   npc-sync
-npc-sync==0.1.26 \
-    --hash=sha256:b4367f95ef667430760516662eee700d062fa5fa90e4e4ad731f7e37b3e7af53 \
-    --hash=sha256:c6a2133c3f5f86178989de3b20a9573d509d1309101aa8e8521243074fa98c41
+npc-sync==0.2.1 \
+    --hash=sha256:897754efabf55f14258fb50b76d038d7740367c1ad150a2bc31309ccd928723e \
+    --hash=sha256:b82f73cc30ae367da0fb91561a3354bf100f0c7593b7dbb6597eb885d9948831
     # via
     #   np-services
     #   npc-ephys
@@ -1287,15 +1287,15 @@ py-cpuinfo==9.0.0 \
     --hash=sha256:3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690 \
     --hash=sha256:859625bc251f64e21f077d099d4162689c762b5d6a4c3c97553d56241c9674d5
     # via tables
-pyarrow==23.0.0 \
-    --hash=sha256:180e3150e7edfcd182d3d9afba72f7cf19839a497cc76555a8dce998a8f67615 \
-    --hash=sha256:1a9ff6fa4141c24a03a1a434c63c8fa97ce70f8f36bccabc18ebba905ddf0f17 \
-    --hash=sha256:2ef0075c2488932e9d3c2eb3482f9459c4be629aa673b725d5e3cf18f777f8e4 \
-    --hash=sha256:4d85cb6177198f3812db4788e394b757223f60d9a9f5ad6634b3e32be1525803 \
-    --hash=sha256:5574d541923efcbfdf1294a2746ae3b8c2498a2dc6cd477882f6f4e7b1ac08d3 \
-    --hash=sha256:65666fc269669af1ef1c14478c52222a2aa5c907f28b68fb50a203c777e4f60c \
-    --hash=sha256:84839d060a54ae734eb60a756aeacb62885244aaa282f3c968f5972ecc7b1ecc \
-    --hash=sha256:a149a647dbfe928ce8830a713612aa0b16e22c64feac9d1761529778e4d4eaa5
+pyarrow==23.0.1 \
+    --hash=sha256:0ae6e17c828455b6265d590100c295193f93cc5675eb0af59e49dbd00d2de350 \
+    --hash=sha256:26d50dee49d741ac0e82185033488d28d35be4d763ae6f321f97d1140eb7a0e9 \
+    --hash=sha256:3c30143b17161310f151f4a2bcfe41b5ff744238c1039338779424e38579d701 \
+    --hash=sha256:6f0147ee9e0386f519c952cc670eb4a8b05caa594eeffe01af0e25f699e4e9bb \
+    --hash=sha256:b8c5873e33440b2bc2f4a79d2b47017a89c5a24116c055625e6f2ee50523f019 \
+    --hash=sha256:db2190fa79c80a23fdd29fef4b8992893f024ae7c17d2f5f4db7171fa30c2c78 \
+    --hash=sha256:f00f993a8179e0e1c9713bcc0baf6d6c01326a406a9c23495ec1ba9c9ebf2919 \
+    --hash=sha256:fed7020203e9ef273360b9e45be52a2a47d3103caf156a30ace5247ffb51bdbd
     # via
     #   npc-ephys
     #   polars
@@ -1352,9 +1352,9 @@ pydantic-core==2.41.5 \
     --hash=sha256:f15489ba13d61f670dcc96772e733aad1a6f9c429cc27574c6cdaed82d0146ad \
     --hash=sha256:f31d95a179f8d64d90f6831d71fa93290893a33148d890ba15de25642c5d075b
     # via pydantic
-pydantic-settings==2.12.0 \
-    --hash=sha256:005538ef951e3c2a68e1c08b292b5f2e71490def8589d4221b95dab00dafcfd0 \
-    --hash=sha256:fddb9fd99a5b18da837b29710391e945b1e30c135477f484084ee513adb93809
+pydantic-settings==2.13.0 \
+    --hash=sha256:95d875514610e8595672800a5c40b073e99e4aae467fa7c8f9c263061ea2e1fe \
+    --hash=sha256:d67b576fff39cd086b595441bf9c75d4193ca9c0ed643b90360694d0f1240246
     # via
     #   aind-codeocean-pipeline-monitor
     #   aind-data-access-api
