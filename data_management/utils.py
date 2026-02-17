@@ -433,7 +433,7 @@ class ConfigWidget(ipw.VBox):
             else:
                 assert self.config.session_type == 'behavior_with_sync'
                 stop = len(txt)
-            new = txt[:stop] + '\n' + self.config.to_yaml_text_snippet() + '\n' + (txt[stop:] if stop else '\n')
+            new = txt[:stop] + '\n' + self.config.to_yaml_text_snippet() + '\n' + ('  ' if self.config.project == 'DynamicRouting' else '') + (txt[stop:] if stop else '\n')
             print("Updating tracked_sessions.yaml")
             pathlib.Path(yml).write_text(new)
             print("Done. If you need to update the info, run the cell above to git reset tracked_sessions.yaml, then re-save output from all widgets")
