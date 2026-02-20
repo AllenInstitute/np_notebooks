@@ -215,17 +215,58 @@ class Config(pydantic.BaseModel):
                 data.pop("project"): [
                     {
                         f"//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/{data.pop('folder')}": {
-                            'ephys_day': self.ephys_day,
-                            'session_kwargs': {
+                            "ephys_day": self.ephys_day,
+                            "session_kwargs": {
                                 k: v
                                 for k, v in data.items()
-                                if v is not None and v != self.model_fields[k].default
-                            }
+                                if v is not None
+                                and v != self.model_fields[k].default
+                                and k not in ("ephys_day", "perturbation_day")
+                            },
                         }
                     }
                 ]
             }
         }
+
+    def to_yaml_text_snippet(self) -> str:
+        d = self.to_dict()
+        indent = " " * 4
+        if self.project == "DynamicRouting":
+            session_dir_parent = "//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/"
+        else:
+            assert (
+                self.project == "TempletonPilotSession"
+            ), "only dr and templeton projects implemented"
+            session_dir_parent = (
+                "//allen/programs/mindscope/workgroups/templeton/TTOC/pilot recordings/"
+            )
+        s = f"\n{indent}- {session_dir_parent}{self.folder}:"
+        for attr in (
+            "ephys_day",
+            "perturbation_day",
+        ):
+            if value := getattr(self, attr, None):
+                s = s + "\n" + indent * 2 + f"ephys_day: {value}"
+        session_kwargs = next(
+            iter(next(iter(d[self.session_type][self.project])).values())
+        )["session_kwargs"]
+        if session_kwargs:
+            s = s + "\n" + indent * 2 + "session_kwargs:"
+            for k, v in session_kwargs.items():
+                s = s + "\n" + indent * 3 + f"{k}: {v}"
+        if s.endswith(":"):
+            s = s[:-1]
+        s = s.replace("\n\n", "\n")
+        return (
+            s
+            + "\n"
+            + (
+                indent
+                if (self.project == "DynamicRouting" and self.session_type == "ephys")
+                else ""
+            )
+        )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], session_id: str) -> Self:
@@ -313,94 +354,281 @@ class UploadWidget(ipw.VBox):
             # print(f"Submitted. Check progress here: http://aind-data-transfer-service/jobs")
 
 
-class ConfigWidget(ipw.VBox):
+class SessionConfigRow:
+    """Widget row for a single session's configuration."""
 
-    yaml_path = UPLOAD / "new_sessions.yaml"
     placeholders = {
         "probe_letters_to_skip": "e.g. AF",
         "surface_recording_probe_letters_to_skip": "e.g. AF",
         "ephys_day": "starting at 1, or empty if no ephys",
         "perturbation_day": "starting at 1, or empty if no perturbation",
-        "session_type": "ephys or behavior_with_sync",
     }
 
-    def __init__(self, data: dict[str, Any], **vbox_kwargs):
+    @staticmethod
+    def _is_bool_field(field) -> bool:
+        """Check if a pydantic field is a boolean type."""
+        import typing
+
+        # Check for bool or Optional[bool]
+        if field.annotation == bool:
+            return True
+        # Check for Optional[bool] (Union[bool, None])
+        if hasattr(field.annotation, "__origin__"):
+            origin = typing.get_origin(field.annotation)
+            args = typing.get_args(field.annotation)
+            # Check for Union types (Optional is Union[X, None])
+            if origin is typing.Union:
+                return bool in args
+        return False
+
+    @staticmethod
+    def _is_literal_field(field) -> bool:
+        """Check if a pydantic field is a Literal type."""
+        import typing
+
+        if hasattr(field.annotation, "__origin__"):
+            origin = typing.get_origin(field.annotation)
+            return origin is Literal
+        return False
+
+    def __init__(self, data: dict[str, Any]):
         self.session_folder = data["folder"]
         self.config = Config(**data)
-        self.console = ipw.Output()
-        self.update_with_previous_data()
+        self.widgets = {}
 
-        self.text_entry_boxes = {
-            name: ipw.Text(
-                description=name,
-                placeholder=self.placeholders.get(name, ""),
-                tooltip=field.description or name,
-                continuous_update=True,
-                layout=ipw.Layout(width="500px", description_width="400px"),
-                value=(
-                    str(getattr(self.config, name))
-                    if getattr(self.config, name) is not None
-                    else ""
-                ),
-                style={"description_width": "initial"},
-            )
-            for name, field in self.config.model_fields.items()
-        }
-        self.text_entry_grid = ipw.GridBox(
-            list(self.text_entry_boxes.values()),
-        )
+        # Create widgets for each field
+        for name, field in self.config.model_fields.items():
+            if name == "folder":
+                # Display folder name as label
+                self.widgets[name] = ipw.HTML(
+                    value=f"<b>{getattr(self.config, name)}</b>",
+                    layout=ipw.Layout(width="400px"),
+                )
+            elif self._is_bool_field(field):
+                # Boolean fields as dropdowns
+                current_value = getattr(self.config, name)
+                # Default to True if None
+                if current_value is None:
+                    current_value = True
+                self.widgets[name] = ipw.Dropdown(
+                    description=name,
+                    options=[("True", True), ("False", False)],
+                    value=current_value,
+                    tooltip=field.description or name,
+                    layout=ipw.Layout(width="500px", description_width="400px"),
+                    style={"description_width": "initial"},
+                )
+            elif self._is_literal_field(field):
+                # Literal fields as dropdowns
+                options = list(getattr(field.annotation, "__args__", []))
+                current_value = getattr(self.config, name)
+                self.widgets[name] = ipw.Dropdown(
+                    description=name,
+                    options=options,
+                    value=current_value,
+                    tooltip=field.description or name,
+                    layout=ipw.Layout(width="500px", description_width="400px"),
+                    style={"description_width": "initial"},
+                )
+            else:
+                # Text fields for everything else
+                self.widgets[name] = ipw.Text(
+                    description=name,
+                    placeholder=self.placeholders.get(name, ""),
+                    tooltip=field.description or name,
+                    continuous_update=True,
+                    layout=ipw.Layout(width="500px", description_width="400px"),
+                    value=(
+                        str(getattr(self.config, name))
+                        if getattr(self.config, name) is not None
+                        else ""
+                    ),
+                    style={"description_width": "initial"},
+                )
+
+    def get_config(self) -> Config:
+        """Get Config object from current widget values."""
+        data = {}
+        for name, widget in self.widgets.items():
+            if isinstance(widget, ipw.HTML):
+                data[name] = self.session_folder
+            elif isinstance(widget, ipw.Dropdown):
+                data[name] = widget.value
+            else:
+                data[name] = widget.value if widget.value != "" else None
+        return Config(**data)
+
+
+class CombinedConfigWidget(ipw.VBox):
+    """Combined widget for all sessions with a single save button."""
+
+    def __init__(self, session_data_list: list[dict[str, Any]], **vbox_kwargs):
+        self.session_rows = [SessionConfigRow(data) for data in session_data_list]
+        self.console = ipw.Output()
+
+        # Create header
+        header = ipw.HTML(value="<h3>Configure Session Metadata</h3>")
+
+        # Create grid for all sessions
+        all_widgets = []
+        for row in self.session_rows:
+            # Add separator
+            all_widgets.append(ipw.HTML(value="<hr>"))
+            # Add all widgets for this session
+            all_widgets.extend(row.widgets.values())
+
+        widget_grid = ipw.VBox(all_widgets)
+
+        # Create save button
         self.save_button = ipw.Button(
-            description="Save",
+            description="Save and Push to GitHub (double-check!)",
             button_style="warning",
             layout=ipw.Layout(width="30%"),
-            tooltip="Save yaml config for this session",
+            tooltip="Save yaml config for all sessions and push to GitHub",
         )
 
         def on_save_click(widget):
-            self.save()
+            widget.disabled = True
+            self.save_and_push()
             widget.button_style = "success"
+            widget.disabled = False
 
         self.save_button.on_click(on_save_click)
 
         super().__init__(
-            [ipw.HBox([self.text_entry_grid]), self.save_button, self.console],
+            [header, widget_grid, self.save_button, self.console],
             **vbox_kwargs,
         )
 
-    def update_with_previous_data(self) -> None:
-        if self.yaml_path.exists():
-            with self.console:
-                existing = yaml.safe_load(self.yaml_path.read_text()) or {}
-                if not existing:
-                    return None
-                e = Config.from_dict(existing, self.session_folder)
-                if e is None:
-                    return None
-                self.config = e
-                print(f"Loaded existing data for {self.session_folder}")
+    def get_existing_sessions(self, yml_path: pathlib.Path) -> set[str]:
+        """Get set of existing session paths from yaml file."""
+        if not yml_path.exists():
+            return set()
 
-    def update_from_text_boxes(self) -> None:
-        with self.console:
-            self.config = Config(
-                **{
-                    name: box.value if box.value != "" else None
-                    for name, box in self.text_entry_boxes.items()
-                },
-            )
+        existing = yaml.safe_load(yml_path.read_text()) or {}
+        session_paths = set()
 
-    def save(self) -> None:
+        for session_type, project_data in existing.items():
+            if not isinstance(project_data, dict):
+                continue
+            for project, sessions in project_data.items():
+                if not isinstance(sessions, list):
+                    continue
+                for session in sessions:
+                    if isinstance(session, dict):
+                        for path in session.keys():
+                            session_paths.add(path)
+
+        return session_paths
+
+    def save_and_push(self) -> None:
+        """Save all configs to yaml and push to GitHub."""
+        import subprocess
+        
         with self.console:
-            self.update_from_text_boxes()
-            if self.yaml_path.exists():
-                print(f"Updating {self.yaml_path}")
-                existing = yaml.safe_load(self.yaml_path.read_text()) or {}
-            else:
-                print(f"Creating {self.yaml_path}")
-                self.yaml_path.parent.mkdir(parents=True, exist_ok=True)
-                existing = {}
-            self.config.update_existing_dict(existing)
-            self.yaml_path.write_text(yaml.dump(existing))
-            print("Done")
+            try:
+                # Get repo path
+                root = pathlib.Path().resolve().parent.parent
+                repo_path = root / "npc_lims"
+                yml_path = repo_path / "tracked_sessions.yaml"
+
+                if not yml_path.exists():
+                    raise FileNotFoundError(
+                        f"git clone npc_lims into {root} before trying to update tracked_sessions.yaml"
+                    )
+
+                # Check for existing sessions
+                existing_sessions = self.get_existing_sessions(yml_path)
+                new_configs = [row.get_config() for row in self.session_rows]
+
+                # Check if any sessions are already in the yaml
+                duplicates = []
+                for config in new_configs:
+                    # Construct the expected path
+                    if config.project == "DynamicRouting":
+                        session_dir_parent = "//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot/"
+                    else:
+                        session_dir_parent = "//allen/programs/mindscope/workgroups/templeton/TTOC/pilot recordings/"
+
+                    session_path = f"{session_dir_parent}{config.folder}"
+                    if session_path in existing_sessions:
+                        duplicates.append(config.folder)
+
+                if duplicates:
+                    raise ValueError(
+                        f"The following sessions are already in tracked_sessions.yaml: {', '.join(duplicates)}. "
+                        f"To modify existing sessions, make changes directly in GitHub."
+                    )
+
+                # Read current yaml
+                txt = yml_path.read_text()
+
+                # Add each session
+                for config in new_configs:
+                    if config.session_type == "ephys":
+                        ephys_stop = txt.find("behavior_with_sync:")
+                        if config.project == "TempletonPilotSession":
+                            stop = ephys_stop
+                        else:
+                            stop = txt[:ephys_stop].find("TempletonPilotSession:")
+                    else:
+                        assert config.session_type == "behavior_with_sync"
+                        stop = len(txt)
+
+                    txt = (
+                        txt[:stop]
+                        + "\n"
+                        + config.to_yaml_text_snippet()
+                        + "\n"
+                        + ("  " if config.project == "DynamicRouting" else "")
+                        + (txt[stop:] if stop else "\n")
+                    )
+
+                # Write updated yaml
+                print("Updating tracked_sessions.yaml...")
+                yml_path.write_text(txt)
+
+                # Git commit and push
+                print("Committing changes...")
+
+                # Add the file
+                subprocess.run(
+                    ["git", "add", "tracked_sessions.yaml"],
+                    cwd=repo_path,
+                    check=True,
+                    capture_output=True,
+                )
+
+                # Commit
+                commit_msg = f"Auto add metadata for {len(new_configs)} session(s)"
+                subprocess.run(
+                    ["git", "commit", "-m", commit_msg],
+                    cwd=repo_path,
+                    check=True,
+                    capture_output=True,
+                )
+
+                # Push
+                print("Pushing to GitHub...")
+                subprocess.run(
+                    ["git", "push"],
+                    cwd=repo_path,
+                    check=True,
+                    capture_output=True,
+                )
+
+                print(
+                    f"✓ Successfully saved and pushed metadata for {len(new_configs)} session(s)!"
+                )
+
+            except subprocess.CalledProcessError as e:
+                print(f"Git error: {e}")
+                if e.stderr:
+                    print(f"Error output: {e.stderr.decode()}")
+                raise
+            except Exception as e:
+                print(f"Error: {e}")
+                raise
 
 
 # def toggle_tracebacks() -> Generator[None, None, None]:
@@ -494,31 +722,33 @@ def validate_folder_contents(folder_names: Iterable[str]) -> None:
 
 
 def display_config_widgets(session_folders: Iterable[str]) -> None:
-    for folder in session_folders:
+    """Display combined config widget for all sessions."""
+    # Filter out surface channel folders and prepare data
+    session_data_list = []
+    folder_df = get_folder_df(ttl_hash=aind_session.get_ttl_hash(600))
+
+    for folder in sorted(session_folders):
         if "surface_channel" in folder:
-            print(
-                "Skipping surface channel folder: metadata is same as main session folder"
-            )
-            continue  # metadata for surface channel is same as main session folder
-        row = get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).filter(
-            pl.col("folder") == folder
-        )
-        print("")
-        IPython.display.display(
-            ConfigWidget(
-                dict(
-                    folder=folder,
-                    ephys_day=row["ephys day"][0],
-                    probe_letters_to_skip="",
-                    surface_recording_probe_letters_to_skip="",
-                    is_production=True,
-                    is_injection_perturbation=False,
-                    is_opto_perturbation=False,
-                    session_type="ephys" if row["ephys"][0] else "behavior_with_sync",
-                    project="DynamicRouting",
-                )
+            print(f"Skipping {folder}: metadata is same as main session folder")
+            continue
+
+        row = folder_df.filter(pl.col("folder") == folder)
+        session_data_list.append(
+            dict(
+                folder=folder,
+                ephys_day=row["ephys day"][0],
+                probe_letters_to_skip="",
+                surface_recording_probe_letters_to_skip="",
+                is_production=True,
+                is_injection_perturbation=False,
+                is_opto_perturbation=False,
+                session_type="ephys" if row["ephys"][0] else "behavior_with_sync",
+                project="DynamicRouting",
             )
         )
+
+    if session_data_list:
+        IPython.display.display(CombinedConfigWidget(session_data_list))
 
 
 def display_upload_widgets(session_folders: Iterable[str]) -> None:
@@ -550,7 +780,7 @@ def get_folder_df(ttl_hash: int | None = None):
         logger.info(f"Fetching info for {s}")
         row = dict.fromkeys(columns, None)
         row["folder"] = s
-        row["ephys"] = bool(next((EPHYS / s).rglob('settings*.xml'), None))
+        row["ephys"] = bool(next((EPHYS / s).rglob("settings*.xml"), None))
         row["date"] = npc_session.extract_isoformat_date(s)
         row["subject"] = str(npc_session.extract_subject(s))
         upload = UPLOAD / s / "upload.csv"
@@ -612,17 +842,19 @@ def get_folders_with_no_metadata() -> tuple[str, ...]:
         )
         if c.exists()
     ]
-    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(named=True):
-        if not row['ephys']:
+    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(
+        named=True
+    ):
+        if not row["ephys"]:
             continue
         for config_yaml in config_yamls:
             config = Config.from_dict(
-                yaml.safe_load(config_yaml.read_text()) or {}, row['folder']
+                yaml.safe_load(config_yaml.read_text()) or {}, row["folder"]
             )
             if config is not None:
                 break
         else:
-            sessions.append(row['folder'])
+            sessions.append(row["folder"])
     return tuple(sorted(sessions, reverse=True))
 
 
@@ -673,7 +905,7 @@ def get_folder_table(
         hidden_columns=["date"] + (["ephys"] if ephys_only else []),
         # groupby=["subject"],
         page_size=15,
-        value=df.sort_values(by='subject'),
+        value=df.sort_values(by="subject"),
         selectable="checkbox-single",
         # disabled=True,
         show_index=False,

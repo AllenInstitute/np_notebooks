@@ -10,9 +10,14 @@ dependencies = [
     "ipykernel",
     "np-workflows>=1.6.96",
     "np-services[pretest]>=0.1.74",
-    "npc-sessions>=0.0.274",
+    "npc-sessions[metadata]>=0.0.274",
     "npc-shields>=0.1.14",
     "np-session>=0.6.47",
     "np-config>=0.4.34",
     "jupyterlab>=4.5.3",
+    "np-codeocean[dynamicrouting]>=0.3.9",
 ]
+
+[tool.uv.sources]
+npc-sessions = { git = "https://github.com/alleninstitute/npc_sessions" }
+np-codeocean = { git = "https://github.com/alleninstitute/np_codeocean" }
