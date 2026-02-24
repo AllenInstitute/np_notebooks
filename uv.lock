@@ -1858,6 +1858,7 @@ dependencies = [
     { name = "np-workflows" },
     { name = "npc-sessions" },
     { name = "npc-shields" },
+    { name = "npc-sync" },
 ]
 
 [package.metadata]
@@ -1871,6 +1872,7 @@ requires-dist = [
     { name = "np-workflows", specifier = ">=1.6.97" },
     { name = "npc-sessions", specifier = ">=0.0.274" },
     { name = "npc-shields", specifier = ">=0.1.14" },
+    { name = "npc-sync", specifier = ">=0.2.2" },
 ]
 
 [[package]]
@@ -2129,7 +2131,7 @@ wheels = [
 
 [[package]]
 name = "npc-sync"
-version = "0.2.1"
+version = "0.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "h5py" },
@@ -2141,9 +2143,9 @@ dependencies = [
     { name = "scipy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c2/16/c8720d604eae8f8f897dfca5357f5058fd35a6e468d5c569ed095a9f8741/npc_sync-0.2.1.tar.gz", hash = "sha256:897754efabf55f14258fb50b76d038d7740367c1ad150a2bc31309ccd928723e", size = 30934, upload-time = "2026-02-17T00:24:47.801Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/cd/3edf0bdddd878838e07aa24a597ad9a774bb4520b83989d137a0b8807aac/npc_sync-0.2.2.tar.gz", hash = "sha256:6af88db70862f865bff6fb922b5affff176a642d2bb6748b28378061ce7dd00f", size = 30902, upload-time = "2026-02-24T19:49:51.673Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/03/7caa357ffac4cf02858ebf528c6857a2fd62d0d52fe9aeb3cfb32e5ccf5a/npc_sync-0.2.1-py3-none-any.whl", hash = "sha256:b82f73cc30ae367da0fb91561a3354bf100f0c7593b7dbb6597eb885d9948831", size = 27258, upload-time = "2026-02-17T00:24:46.484Z" },
+    { url = "https://files.pythonhosted.org/packages/08/73/f532d55dfe723bfdea269d935646a123595e8cabccc00e7c0b254d3b9e5f/npc_sync-0.2.2-py3-none-any.whl", hash = "sha256:08c644a68bab9f7cf988d21e6a92a183c5dc8d112910ce6628a573d1b1efed81", size = 27249, upload-time = "2026-02-24T19:49:50.576Z" },
 ]
 
 [[package]]
