@@ -17,4 +17,6 @@ dependencies = [
     "np-config>=0.4.34",
     "jupyterlab>=4.5.3",
     "npc-sync>=0.2.2",
+    "panel>=1.8.9",
 ]
+ 
