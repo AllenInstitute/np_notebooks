@@ -76,6 +76,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+echo.
+echo Checking out main branch...
+git checkout main
+
 :: Clean untracked files
 echo.
 echo Cleaning untracked files...
