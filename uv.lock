@@ -1889,15 +1889,15 @@ wheels = [
 
 [[package]]
 name = "np-logging"
-version = "0.5.1"
+version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "importlib-resources" },
     { name = "np-config" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b2/5e/a21974a9ef2026884e679eda11222093ae5daa19b4a614a54f4a93800888/np_logging-0.5.1.tar.gz", hash = "sha256:0e258eef7a9214246d1a0b0109f0d09f830c002777b83036009ac568a2a0b01a", size = 10256, upload-time = "2023-03-09T18:31:57.361Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/db/366b08dd1064d1969c851534d46fb39f6a06c6d81b892f40d1eb6c3b93ac/np_logging-0.5.2.tar.gz", hash = "sha256:88bfd5483a790c53bcf6edfd6c5deaa6432773eef02367ea4dfd92412765c322", size = 10258, upload-time = "2026-03-18T23:11:13.313Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/7b/9ba634f79c1267913f266444978f0672efdc8b9cb2b7c4fcd4358086875f/np_logging-0.5.1-py3-none-any.whl", hash = "sha256:b48435c17ba7182253c43666dbcab88472e14fabbd5089a248a08509572e1764", size = 10896, upload-time = "2023-03-09T18:31:55.631Z" },
+    { url = "https://files.pythonhosted.org/packages/91/7b/66ecb683f5a5477d14728b622c47d6a0f86ff32d7981f4dd072ca29d8ea2/np_logging-0.5.2-py3-none-any.whl", hash = "sha256:53d4df95dc4bdb6bab3afc22740c50aa5756d71fbb23033d8b4d6199aa7adf4b", size = 10892, upload-time = "2026-03-18T23:11:12.41Z" },
 ]
 
 [[package]]

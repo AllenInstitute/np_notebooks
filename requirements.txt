@@ -932,9 +932,9 @@ np-jobs==0.0.9 \
     --hash=sha256:503f47eaf9d9edd7eee3a687002c60e055aee2b0ba8d14ced8e83dbac8fa66ea \
     --hash=sha256:69df176016f7a2295654788fa9a07b20c2b4a7ded916516d162d2b26821f061e
     # via np-workflows
-np-logging==0.5.1 \
-    --hash=sha256:0e258eef7a9214246d1a0b0109f0d09f830c002777b83036009ac568a2a0b01a \
-    --hash=sha256:b48435c17ba7182253c43666dbcab88472e14fabbd5089a248a08509572e1764
+np-logging==0.5.2 \
+    --hash=sha256:53d4df95dc4bdb6bab3afc22740c50aa5756d71fbb23033d8b4d6199aa7adf4b \
+    --hash=sha256:88bfd5483a790c53bcf6edfd6c5deaa6432773eef02367ea4dfd92412765c322
     # via
     #   np-jobs
     #   np-session
