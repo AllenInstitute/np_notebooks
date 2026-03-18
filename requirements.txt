@@ -480,9 +480,9 @@ google-cloud-firestore==2.25.0 ; platform_python_implementation != 'PyPy' \
     --hash=sha256:9bca3b504f5473048eeab603b9bec69bbeffcdddc4e5fc65cdcc01b449628fc0 \
     --hash=sha256:c933a7696b7dd160953d60413ab9481387f6dd8367e77dd750d841689773104a
     # via firebase-admin
-google-cloud-storage==3.9.0 \
-    --hash=sha256:2dce75a9e8b3387078cbbdad44757d410ecdb916101f8ba308abf202b6968066 \
-    --hash=sha256:f2d8ca7db2f652be757e92573b2196e10fbc09649b5c016f8b422ad593c641cc
+google-cloud-storage==3.10.0 \
+    --hash=sha256:0072e7783b201e45af78fd9779894cdb6bec2bf922ee932f3fcc16f8bce9b9a3 \
+    --hash=sha256:1aeebf097c27d718d84077059a28d7e87f136f3700212215f1ceeae1d1c5d504
     # via firebase-admin
 google-crc32c==1.8.0 \
     --hash=sha256:014a7e68d623e9a4222d663931febc3033c5c7c9730785727de2a81f87d5bab8 \
@@ -1012,9 +1012,9 @@ npc-sessions==0.0.277 \
     --hash=sha256:078b4672fc347049671e69b23b8761ccd90fe1e5ed08b2cc30d9641ca7dd3149 \
     --hash=sha256:ab3e8b2fc2b65c92172b6cb2cc6f924d1864ddbe1323a83e08600f4d28fdc039
     # via np-notebooks
-npc-shields==0.1.14 \
-    --hash=sha256:119e52c3750129b7cd7d31079d44bd89713bca3e1da0e9ac29c803695af83a98 \
-    --hash=sha256:7ca0eeaa297dae2fca3924eaebfd6100e876b02c07a9460c90381a711262f1f6
+npc-shields==0.1.15 \
+    --hash=sha256:a95476ec2d46beaad1be309e44228ac46cb0a36e75acfbea60481d8b595f076a \
+    --hash=sha256:ba9624a12e10630e886168f288f8a890eb3c951c1a562da8beb8563876629a37
     # via
     #   np-notebooks
     #   np-workflows
@@ -1214,22 +1214,22 @@ platformdirs==3.11.0 \
     # via
     #   jupyter-core
     #   np-config
-polars==1.39.0 \
-    --hash=sha256:4d1198b41bc47561673d9f54d0f595125202a3f53e3502821802958d3e60efe9 \
-    --hash=sha256:e63a25fb7682ae660e36067915a7c71a653b17f82308a8eb67a190a80daf0710
+polars==1.39.2 \
+    --hash=sha256:4c18adebbec09e71021cb54af3b529f5d77b78d0220bb96f251855b418152691 \
+    --hash=sha256:81a522dbc8a90153f8b584db65ada340e02eff35e880b1c8317a4db2972f332e
     # via
     #   npc-ephys
     #   npc-sessions
-polars-runtime-32==1.39.0 \
-    --hash=sha256:0daea3919661ba672b00bd01b5547cd29bb6414732457abb72cbc75103cf3c90 \
-    --hash=sha256:4a0e9d6b56362f3ba1a33d0538ae14c9b9a8e0fb835f86abfc82fa7b2c7d89c9 \
-    --hash=sha256:4a4bc06ca97238d963979e3f888fbb500ee607f03cefe43a9062381e259503e2 \
-    --hash=sha256:8ded58f1c28e17ecbff8625cb1ad93016761260348acb79b1a4cd077970e89e5 \
-    --hash=sha256:b82c872b25ef6628462f90f1b6b3950779aee36889e83b3693d0a69684d3d86a \
-    --hash=sha256:d69abde5f148566860bbe910010847bd7791e72f7c8063a4d2c462246a33a72a \
-    --hash=sha256:d6e9d1cf264aacfe5bf03241c04ef435d0f9cfec3fbe079acc3a7328a737961a \
-    --hash=sha256:e9914b9e168634bc21d07ee03b8fa92d0aaa8ac7b2bb1c9e2f1f78622aa1b8f4 \
-    --hash=sha256:f5aabed8c7318fcad5173e83bee385445f54b5f8c83b1ec9eab78bdffa293141
+polars-runtime-32==1.39.2 \
+    --hash=sha256:4786a82d300e1005b5d3ee3c42f16c5b457d3c34cb5d3e1d2423a41e53a51292 \
+    --hash=sha256:54681d568a7a33468248406a02d9335e767c838c6a64b0d8ea810ed73561efed \
+    --hash=sha256:5895c531f61cad339a6283410c5b142f51c785263970efdea4d3ec571c1d98ef \
+    --hash=sha256:897deb4b2c878d65d0f753bb79c95b94902e4fb6c8f55693e059f419cebb54e6 \
+    --hash=sha256:b3aa5295f1fabde44230d65843974c7eed8e1826ddbe6279fb2af5ad43135432 \
+    --hash=sha256:cd140b510aeaa929d868f2dde12b1d9163e6df416a30abbabc936f0dc68f58b8 \
+    --hash=sha256:d4402c8d35a9dcec2049e6b0bcfd13853ef1a0ce456a32b489b81979d3e6f8a5 \
+    --hash=sha256:eac7180dc99251050c54cc7f8e599167b4f10f0f165f64c593cfc6b6ece11da8 \
+    --hash=sha256:f8165a49fd3fdb9526f23448ec62186c387ddb8b3a574b1cbe093e7efbf20b97
     # via polars
 prometheus-client==0.24.1 \
     --hash=sha256:150db128af71a5c2482b36e588fc8a6b95e498750da4b17065947c16070f4055 \
@@ -1266,15 +1266,15 @@ proto-plus==1.27.1 \
     # via
     #   google-api-core
     #   google-cloud-firestore
-protobuf==6.33.5 \
-    --hash=sha256:3093804752167bcab3998bec9f1048baae6e29505adaf1afd14a37bddede533c \
-    --hash=sha256:69915a973dd0f60f31a08b8318b73eab2bd6a392c79184b3612226b0a3f8ec02 \
-    --hash=sha256:6ddcac2a081f8b7b9642c09406bc6a4290128fce5f471cddd165960bb9119e5c \
-    --hash=sha256:8afa18e1d6d20af15b417e728e9f60f3aa108ee76f23c3b2c07a2c3b546d3afd \
-    --hash=sha256:9b71e0281f36f179d00cbcb119cb19dec4d14a81393e5ea220f64b286173e190 \
-    --hash=sha256:a5cb85982d95d906df1e2210e58f8e4f1e3cdc088e52c921a041f9c9a0386de5 \
-    --hash=sha256:cbf16ba3350fb7b889fca858fb215967792dc125b35c7976ca4818bee3521cf0 \
-    --hash=sha256:d71b040839446bac0f4d162e758bea99c8251161dae9d0983a3b88dee345153b
+protobuf==6.33.6 \
+    --hash=sha256:0cd27b587afca21b7cfa59a74dcbd48a50f0a6400cfb59391340ad729d91d326 \
+    --hash=sha256:77179e006c476e69bf8e8ce866640091ec42e1beb80b213c3900006ecfba6901 \
+    --hash=sha256:7d29d9b65f8afef196f8334e80d6bc1d5d4adedb449971fefd3723824e6e77d3 \
+    --hash=sha256:9720e6961b251bde64edfdab7d500725a2af5280f3f4c87e57c0208376aa8c3a \
+    --hash=sha256:a6768d25248312c297558af96a9f9c929e8c4cee0659cb07e780731095f38135 \
+    --hash=sha256:c96c37eec15086b79762ed265d59ab204dabc53056e3443e702d2681f4b39ce3 \
+    --hash=sha256:e2afbae9b8e1825e3529f88d514754e094278bb95eadc0e199751cdd9a2e82a2 \
+    --hash=sha256:e9db7e292e0ab79dd108d7f1a94fe31601ce1ee3f7b79e0692043423020b0593
     # via
     #   google-api-core
     #   google-cloud-firestore
@@ -1332,9 +1332,9 @@ pyarrow==23.0.1 \
     # via
     #   npc-ephys
     #   polars
-pyasn1==0.6.2 \
-    --hash=sha256:1eb26d860996a18e9b6ed05e7aae0e9fc21619fcee6af91cca9bad4fbea224bf \
-    --hash=sha256:9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b
+pyasn1==0.6.3 \
+    --hash=sha256:697a8ecd6d98891189184ca1fa05d1bb00e2f84b5977c481452050549c8a72cf \
+    --hash=sha256:a80184d120f0864a52a073acc6fc642847d0be408e7c7252f31390c0f4eadcde
     # via pyasn1-modules
 pyasn1-modules==0.4.2 \
     --hash=sha256:29253a9207ce32b64c3ac6600edc75368f98473906e8fd1043bd6b5b1de2c14a \
