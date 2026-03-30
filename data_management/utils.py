@@ -502,6 +502,16 @@ def get_folder_table(
     return table
 
 
+def is_split_recording(folder: str) -> bool:
+    """Check if session_config.json indicates a split recording."""
+    path = EPHYS / folder / "session_config.json"
+    if not path.exists():
+        logger.warning(f"No session_config.json found for {folder}")
+        return False
+    config = json.loads(path.read_text())
+    return bool(config.get("is_split_recording"))
+
+
 def create_bat_file(
     folder_names: Iterable[str],
     path: pathlib.Path = pathlib.Path("~/Desktop/upload_s3.bat").expanduser(),
