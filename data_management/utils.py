@@ -55,7 +55,8 @@ logging.getLogger("aind_session.utils").disabled = True
 EPHYS = pathlib.Path(
     "//allen/programs/mindscope/workgroups/dynamicrouting/PilotEphys/Task 2 pilot"
 )
-UPLOAD = pathlib.Path("//allen/programs/mindscope/workgroups/np-exp/codeocean")
+NPEXP_UPLOAD = pathlib.Path("//allen/programs/mindscope/workgroups/np-exp/codeocean")
+DR_UPLOAD = pathlib.Path("//allen/programs/mindscope/workgroups/dynamicrouting/codeocean-upload")
 
 executor = concurrent.futures.ThreadPoolExecutor()
 expected_suffixes = {".h5": "sync", ".hdf5": "stim", ".mp4": "video"}
@@ -451,10 +452,10 @@ class SessionConfigRow:
         yield self.status_label
 
 
-class CombinedConfigWidget(ipw.VBox):
+class CombinedConfigWidget:
     """Combined widget for all sessions with a single save button."""
 
-    def __init__(self, session_data_list: list[dict[str, Any]], **vbox_kwargs):
+    def __init__(self, session_data_list: list[dict[str, Any]]):
         self.session_rows = [SessionConfigRow(data) for data in session_data_list]
         self.console = ipw.Output()
 
@@ -487,9 +488,8 @@ class CombinedConfigWidget(ipw.VBox):
         self.save_to_npc_lims.on_click(on_save_to_npc_lims_click)
 
         bottom = [] if os.environ.get("AIBS_RIG_ID") else [self.save_to_npc_lims]
-        super().__init__(
+        self.widget = ipw.VBox(
             [header, widget_grid, *bottom, self.console],
-            **vbox_kwargs,
         )
 
     def get_existing_sessions(self, yml_path: pathlib.Path) -> set[str]:
@@ -604,9 +604,9 @@ class CombinedConfigWidget(ipw.VBox):
                 print(f"Error: {e}")
                 raise
 
-class UploadWidget(ipw.VBox):
+class UploadWidget:
 
-    def __init__(self, folder: str, **vbox_kwargs):
+    def __init__(self, folder: str):
         self.folder = folder
         self.console = ipw.Output()
         self.upload_button = ipw.Button(
@@ -627,9 +627,8 @@ class UploadWidget(ipw.VBox):
 
         self.upload_button.on_click(on_upload_click)
 
-        super().__init__(
+        self.widget = ipw.VBox(
             [self.upload_button, self.force_toggle, self.console],
-            **vbox_kwargs,
         )
 
     def upload(self) -> None:
@@ -768,13 +767,15 @@ def display_config_widgets(session_folders: Iterable[str]) -> None:
         )
 
     if session_data_list:
-        IPython.display.display(CombinedConfigWidget(session_data_list))
+        obj = CombinedConfigWidget(session_data_list)
+        IPython.display.display(obj.widget)
+        return obj
 
 
 def display_upload_widgets(session_folders: Iterable[str]) -> None:
     for folder in session_folders:
         print("")
-        IPython.display.display(UploadWidget(folder))
+        IPython.display.display(UploadWidget(folder).widget)
 
 
 @functools.cache
@@ -803,27 +804,42 @@ def get_folder_df(ttl_hash: int | None = None):
         row["ephys"] = bool(next((EPHYS / s).rglob("settings*.xml"), None))
         row["date"] = npc_session.extract_isoformat_date(s)
         row["subject"] = str(npc_session.extract_subject(s))
-        upload = UPLOAD / s / "upload.csv"
-        row["created"] = upload.exists()
-        if row["created"]:
-            df = pl.read_csv(upload)
-            if any("acq-datetime" in c for c in df.columns):
-                for c in df.columns:
-                    if "acq-datetime" in c:
-                        dt = df[c].drop_nulls()[0]
+        
+        row["created"] = False
+        for d in (DR_UPLOAD, NPEXP_UPLOAD,):
+            if (d/s).exists():
+                for ext in (".csv", ".json",):
+                    if (upload := (d / s / f"upload{ext}")).exists():
+                        row["created"] = True
+                        print(f"{upload} exists")
                         break
-            elif r"acq-datetime\r" in df.columns:
-                dt = df[r"acq-datetime\r"].drop_nulls()[0]
-            elif "acq-date" in df.columns:
-                dt = (
-                    f"{df['acq-date'].drop_nulls()[0]}_{df['acq-time'].drop_nulls()[0]}"
-                )
+                break
+        if row["created"]:
+            if ext == ".csv":
+                df = pl.read_csv(upload)
+                
+                if any("acq-datetime" in c for c in df.columns):
+                    for c in df.columns:
+                        if "acq-datetime" in c:
+                            dt = df[c].drop_nulls()[0]
+                            break
+                elif r"acq-datetime\r" in df.columns:
+                    dt = df[r"acq-datetime\r"].drop_nulls()[0]
+                elif "acq-date" in df.columns:
+                    dt = (
+                        f"{df['acq-date'].drop_nulls()[0]}_{df['acq-time'].drop_nulls()[0]}"
+                    )
+                else:
+                    raise ValueError(f"no datetime column found in {upload}")
+                if not dt:
+                    import pdb
+    
+                    pdb.set_trace()
+            elif ext == ".json":
+                m = json.loads(upload.read_text())
+                dt = m['upload_jobs'][0]['acq_datetime'].replace('T', '_')
             else:
-                raise ValueError(f"no datetime column found in {upload}")
-            if not dt:
-                import pdb
-
-                pdb.set_trace()
+                raise NotImplementedError(f"Unsure how to read upload data from {upload}")    
             dt = dt.replace(":", "-").replace(" ", "_")
             row["aind ID"] = npc_session.AINDSessionRecord(
                 f"ecephys_{row['subject']}_{dt}"
@@ -852,31 +868,6 @@ def get_folder_df(ttl_hash: int | None = None):
     return df
 
 
-def get_folders_with_no_metadata() -> tuple[str, ...]:
-    sessions = []
-    config_yamls = [
-        c
-        for c in (
-            npc_lims.tracked_sessions._TRACKED_SESSIONS_FILE,
-            UPLOAD / "new_sessions.yaml",
-        )
-        if c.exists()
-    ]
-    for row in get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).iter_rows(
-        named=True
-    ):
-        if not row["ephys"]:
-            continue
-        for config_yaml in config_yamls:
-            config = Config.from_dict(
-                yaml.safe_load(config_yaml.read_text()) or {}, row["folder"]
-            )
-            if config is not None:
-                break
-        else:
-            sessions.append(row["folder"])
-    return tuple(sorted(sessions, reverse=True))
-
 
 def get_folder_table(
     ephys_only: bool = False,
@@ -886,7 +877,7 @@ def get_folder_table(
     # yield pn.indicators.LoadingSpinner(
     #     value=True, size=20, name="Fetching folders..."
     # )
-    df = get_folder_df(ttl_hash=aind_session.get_ttl_hash(600)).to_pandas()
+    df = get_folder_df(ttl_hash=aind_session.get_ttl_hash(6)).to_pandas()
     if ephys_only:
         df = df[df["ephys"]]
     if unstarted_only:
