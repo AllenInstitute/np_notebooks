@@ -10,7 +10,7 @@ dependencies = [
     "ipykernel",
     "ipylab",
     "np-workflows>=1.6.103",
-    "np-services[pretest]>=0.1.74",
+    "np-services[pretest]>=0.1.75",
     "npc-sessions>=0.0.274",
     "npc-shields>=0.1.15",
     "np-session>=0.6.47",
